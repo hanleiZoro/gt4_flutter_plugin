@@ -22,6 +22,7 @@ class Gt4FlutterPlugin {
   EventHandler? _onShow;
   EventHandler? _onResult;
   EventHandler? _onError;
+  EventHandler? _onFocusChange;
 
   Gt4FlutterPlugin(String captchaId, [GT4SessionConfiguration? config]) {
     try {
@@ -85,12 +86,14 @@ class Gt4FlutterPlugin {
     ///
     ///
     EventHandler? onShow,
+    EventHandler? onFocusChange,
   }) {
     debugPrint("${flutterLog}addEventHandler");
 
     _onShow = onShow;
     _onResult = onResult;
     _onError = onError;
+    _onFocusChange = onFocusChange;
     _channel.setMethodCallHandler(_handler);
   }
 
@@ -106,6 +109,15 @@ class Gt4FlutterPlugin {
       case "onError":
         debugPrint("${flutterLog}onError:$_onError");
         return _onError!(methodCall.arguments.cast<String, dynamic>());
+      case "actionBeforeDialogShow":
+        debugPrint("${flutterLog}actionBeforeDialogShow");
+        return ;
+      case "actionAfterDialogShow":
+        debugPrint("${flutterLog}actionAfterDialogShow");
+        return ;
+      case "onDialogFocusChanged":
+        debugPrint("${flutterLog}onDialogFocusChanged:${methodCall.arguments}");
+        return _onFocusChange({'show': methodCall.arguments});
       default:
         throw UnsupportedError("${flutterLog}Unrecognized Event");
     }

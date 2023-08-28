@@ -1,6 +1,7 @@
 package com.geetest.captcha.flutter.gt4_flutter_plugin
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.res.Configuration
 import androidx.annotation.NonNull
@@ -16,7 +17,7 @@ import io.flutter.plugin.common.MethodChannel.Result
 import org.json.JSONObject
 
 /** Gt4FlutterPlugin */
-class Gt4FlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
+class Gt4FlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, GTCaptcha4Client.OnDialogShowListener {
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -108,6 +109,7 @@ class Gt4FlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                     hashMap[it.key] = it.value
                 }
             }
+            configBuilder.setDialogShowListener(this);
             configBuilder.setParams(hashMap)
             gtCaptcha4Client?.init(param["captchaId"] as String, configBuilder.build())
         } else {
@@ -176,6 +178,27 @@ class Gt4FlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     override fun onDetachedFromActivity() {
         destroy()
         activity = null
+    }
+
+    override fun actionBeforeDialogShow(p0: Dialog?) {
+        channel.invokeMethod(
+            "actionBeforeDialogShow",
+            null
+        )
+    }
+
+    override fun actionAfterDialogShow(p0: Dialog?) {
+        channel.invokeMethod(
+            "actionAfterDialogShow",
+            null
+        )
+    }
+
+    override fun onDialogFocusChanged(p0: Dialog?, p1: Boolean) {
+        channel.invokeMethod(
+            "onDialogFocusChanged",
+            p1,
+        )
     }
 
 }
