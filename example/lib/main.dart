@@ -40,7 +40,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> initPlatformState() async {
     GT4SessionConfiguration config = GT4SessionConfiguration();
     config.logEnable = false;
-    captcha = Gt4FlutterPlugin("123456789012345678901234567890ab", config);
+    captcha = Gt4FlutterPlugin("8d61f114004f5592da17bb1c32253d75", config);
 
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
@@ -55,7 +55,10 @@ class _MyAppState extends State<MyApp> {
     try {
       _demoChannel.setMethodCallHandler(_configurationChanged);
 
-      captcha.addEventHandler(onShow: (Map<String, dynamic> message) async {
+      captcha.addEventHandler(onFocusChange: (message) {
+        bool show = message['show'];
+        debugPrint("Captcha onFocusChange - ${show}");
+      },onShow: (Map<String, dynamic> message) async {
         // TO-DO
         // 验证视图已展示
         debugPrint("Captcha did show");

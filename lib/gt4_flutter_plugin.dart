@@ -117,7 +117,7 @@ class Gt4FlutterPlugin {
         return ;
       case "onDialogFocusChanged":
         debugPrint("${flutterLog}onDialogFocusChanged:${methodCall.arguments}");
-        return _onFocusChange({'show': methodCall.arguments});
+        return _onFocusChange!({'show': methodCall.arguments});
       default:
         throw UnsupportedError("${flutterLog}Unrecognized Event");
     }
